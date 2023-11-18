@@ -1,0 +1,10 @@
+from envparse import Env
+
+env = Env()
+env.read_envfile()
+
+MONGO_USER = env.str('MONGO_INITDB_ROOT_USERNAME')
+MONGO_PASSWORD = env.str('MONGO_INITDB_ROOT_PASSWORD')
+MONGO_HOST = env.str('MONGO_HOST')
+MONGO_PORT = env.str('MONGO_PORT')
+MONGO_CONNECTION_STRING = f'mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/'
