@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from typing import List
 
 from pydantic import (
     BaseModel,
@@ -45,3 +46,10 @@ class GetFormPhoneQueryParam(GetFormQueryParamBase):
 
 class GetFormTextQueryParam(GetFormQueryParamBase):
     ...
+
+
+class GetFormInputEntity(BaseModel):
+    email_params: List[GetFormEmailQueryParam] = []
+    date_params: List[GetFormDateQueryParam] = []
+    phone_params: List[GetFormPhoneQueryParam] = []
+    text_params: List[GetFormTextQueryParam] = []
