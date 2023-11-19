@@ -10,8 +10,8 @@ from app.routers.entities.input.get_form_input_entity import (
 
 
 class GetFormQueryParamFactory:
-    @classmethod
-    def get_form_query_param(cls, field_name: str, field_value: str):
+    @staticmethod
+    def get_form_query_param(field_name: str, field_value: str):
         possible_classes = [
             GetFormDateQueryParam,
             GetFormPhoneQueryParam,
