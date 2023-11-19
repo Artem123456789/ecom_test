@@ -1,8 +1,6 @@
 import json
 
-from pymongo import MongoClient
-
-from app.settings import MONGO_CONNECTION_STRING
+from app.services.mongo_db_service import MongoDbService
 
 
 class EcomDbFiller:
@@ -11,7 +9,7 @@ class EcomDbFiller:
         self.__db_name = db_name
         self.__forms_collection_name = forms_collection_name
         self.__forms_data_file_name = forms_data_file_name
-        self.__client = MongoClient(MONGO_CONNECTION_STRING)
+        self.__mongo_db_service = MongoDbService()
 
     def __get_forms_data(self) -> list:
         with open(self.__forms_data_file_name, "r") as f:
@@ -20,7 +18,7 @@ class EcomDbFiller:
         return data
 
     def __check_db_is_not_exists(self) -> bool:
-        db_list = self.__client.list_database_names()
+        db_list = self.__mongo_db_service.get_db_list()
         if self.__db_name in db_list:
             return False
 
@@ -28,7 +26,7 @@ class EcomDbFiller:
 
     def fill_db(self) -> None:
         if self.__check_db_is_not_exists():
-            ecom_db = self.__client[self.__db_name]
+            ecom_db = self.__mongo_db_service.get_db(self.__db_name)
             forms_collection = ecom_db[self.__forms_collection_name]
             forms_data = self.__get_forms_data()
             forms_collection.insert_many(forms_data)
