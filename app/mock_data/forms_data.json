@@ -7,21 +7,6 @@
     "interests": "text"
   },
   {
-    "name": "email_only_form",
-    "user_email": "email"
-  },
-  {
-    "name": "email_phone_form",
-    "user_email": "email",
-    "user_phone": "phone"
-  },
-  {
-    "name": "partially_full_form",
-    "user_email": "email",
-    "user_phone": "phone",
-    "date_register": "date"
-  },
-  {
     "name": "new_form",
     "check_email": "email",
     "check_phone": "phone",
