@@ -13,7 +13,7 @@ class FormsHandler:
         self.__forms_collection_name = forms_collection_name
         self.__mongo_db_service = MongoDbService()
 
-    def __prepare_get_form_query(self, input_entity: GetFormInputEntity):
+    def __get_query_from_input_entity(self, input_entity: GetFormInputEntity) -> dict:
         query = {}
 
         for param in input_entity.date_params:
@@ -25,6 +25,9 @@ class FormsHandler:
         for param in input_entity.text_params:
             query[param.field_name] = 'text'
 
+        return query
+
+    def __prepare_get_form_query(self, query: dict) -> dict:
         query_list = []
         for i in range(1, len(query) + 1):
             for combination in itertools.combinations(query.items(), i):
@@ -37,12 +40,13 @@ class FormsHandler:
         return full_query
 
     def get_form(self, input_entity: GetFormInputEntity) -> Union[GetFormSuccessResponseEntity, dict]:
-        query = self.__prepare_get_form_query(input_entity)
+        query = self.__get_query_from_input_entity(input_entity)
+        get_form_query = self.__prepare_get_form_query(query)
 
         ecom_db = self.__mongo_db_service.get_db(self.__db_name)
         forms_collection = ecom_db[self.__forms_collection_name]
-        result = forms_collection.find(query, {'name': 1})
-        for item in result:
-            return GetFormSuccessResponseEntity(name=item['name'])
+        result = forms_collection.find_one(get_form_query, {'name': 1})
+        if result:
+            return GetFormSuccessResponseEntity(name=result['name'])
 
         return query
