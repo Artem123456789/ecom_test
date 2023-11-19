@@ -13,9 +13,9 @@ class GetFormQueryParamFactory:
     @classmethod
     def get_form_query_param(cls, field_name: str, field_value: str):
         possible_classes = [
-            GetFormEmailQueryParam,
             GetFormDateQueryParam,
             GetFormPhoneQueryParam,
+            GetFormEmailQueryParam,
         ]
         for possible_class in possible_classes:
             try:
@@ -31,13 +31,13 @@ def validate_get_form_query_params(request: Request) -> GetFormInputEntity:
     get_form_input_entity = GetFormInputEntity()
     for i, j in request.query_params.items():
         query_param = GetFormQueryParamFactory.get_form_query_param(i, j)
-        if isinstance(query_param, GetFormEmailQueryParam):
-            get_form_input_entity.email_params.append(query_param)
-        elif isinstance(query_param, GetFormDateQueryParam):
+        if isinstance(query_param, GetFormDateQueryParam):
             get_form_input_entity.date_params.append(query_param)
         elif isinstance(query_param, GetFormPhoneQueryParam):
             get_form_input_entity.phone_params.append(query_param)
-        elif isinstance(query_param, GetFormTextQueryParam):
+        elif isinstance(query_param, GetFormEmailQueryParam):
+            get_form_input_entity.email_params.append(query_param)
+        else:
             get_form_input_entity.text_params.append(query_param)
 
     return get_form_input_entity
